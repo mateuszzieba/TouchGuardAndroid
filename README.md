@@ -1,93 +1,102 @@
-# TouchGuard — blokada przypadkowych dotknięć ekranu
+# TouchGuardAndroid
 
-Prosta, lokalna aplikacja na Androida, bez internetu, kont i reklam. Projekt w Java / Android SDK (bez zewnętrznych bibliotek), zbudowany z myślą o własnym telefonie i opublikowaniu kodu na GitHubie.
+**TouchGuard** is a lightweight Android app that helps prevent accidental touchscreen interactions while watching videos, reading, or using other apps. It places a transparent touch-blocking overlay over regular app content for a limited time.
 
-## Jak to działa
+No account, advertisements, analytics, or internet connection are required.
 
-1. Zainstaluj i uruchom TouchGuard; przyznaj uprawnienie **Wyświetlanie nad innymi aplikacjami**.
-2. Opcjonalnie przyznaj powiadomienia (aby mieć przycisk „Odblokuj” w powiadomieniu).
-3. Wybierz długość blokady na suwaku: **15 sekund – 30 minut, co 15 sekund**. Domyślnie **60 sekund**.
-4. Naciśnij **Włącz blokadę**, lub dodaj kafelek **Blokada dotyku** do szybkich ustawień i włączaj z poziomu innych aplikacji.
-5. Po uruchomieniu pojawi się całkowicie przezroczysta nakładka pochłaniająca dotknięcia. Mała kłódka wyświetla czas pozostały do automatycznego odblokowania.
-6. Odblokowanie: **przytrzymaj małą kłódkę na ekranie przez 3 sekundy**, użyj kafelka lub przycisku **Odblokuj** w powiadomieniu. Po upływie czasu blokada znika sama.
+## Features
 
-**WAŻNE:** Fizyczne przyciski **zasilania, głośności + i -** pozostają obsługiwane przez Androida — aplikacja ich nie przechwytuje. **Systemowe gesty** (np. ekran główny, pasek powiadomień, przełączanie aplikacji) oraz pewne systemowe okna mogą nadal działać: zwykła aplikacja nie ma uprawnień do blokowania ich globalnie. Nakładka blokuje dotyk **w obrębie okien aplikacji**, nie jest trybem kioskowym ani blokadą bezpieczeństwa. Podczas używania klawiatury systemowej nakładka może znajdować się pod klawiaturą.
+- Transparent overlay that absorbs touches intended for regular applications.
+- Video playback and audio can continue while touch protection is active.
+- Automatic unlock after **60 seconds** by default.
+- Adjustable timeout from **15 seconds to 30 minutes**, in 15-second increments.
+- Manual unlock by holding the small on-screen lock indicator for **3 seconds**.
+- Quick Settings tile to toggle touch protection.
+- Unlock action in the notification.
+- Physical **power and volume buttons remain available**.
 
-**Dlaczego nie używamy 5-sekundowego przytrzymania Power + Volume?** Android rezerwuje przycisk Power i kombinacje klawiszy do systemowych funkcji, takich jak zrzut ekranu, asystent i wyłączenie. Zwykła aplikacja nie może niezawodnie przechwycić tej kombinacji bez ingerencji w system. Zamiast tego jest kafelek Quick Settings i awaryjna kłódka.
+## How to use
 
-## Budowanie APK na Ubuntu
+1. Install and launch TouchGuard.
+2. Allow **Display over other apps** when prompted.
+3. Optionally allow notifications to access the notification unlock action.
+4. Choose the protection duration in the app.
+5. Tap the lock button in TouchGuard, or enable the Quick Settings tile and use it from another app.
+6. To unlock early, hold the on-screen lock indicator for 3 seconds, use the notification action, or wait for the timeout.
 
-Wypakuj ZIP i otwórz terminal w folderze `TouchGuardAndroid`:
+To add the Quick Settings tile, use the in-app button on supported Android versions or edit the Quick Settings panel manually.
+
+## Download APK
+
+Get the APK from **[GitHub Releases](https://github.com/mateuszzieba/TouchGuardAndroid/releases)**.
+
+For the first version, download `TouchGuardAndroid-v1.0.0.apk` from the **Assets** section of the release. Open it on your Android device and allow installation from your browser or file manager if Android requests permission.
+
+> **Note:** Version 1.0.0 is a **debug-signed test build**, not a production-signed release. Updating to a build signed with a different key may require uninstalling the previous version first.
+
+## Build on Ubuntu
+
+The project uses Java 17, Android SDK 35, Android Gradle Plugin, and Gradle 8.9. Android Studio is not required; the build script prepares the necessary command-line tools.
+
+From the project directory:
 
 ```bash
-chmod +x build_apk_ubuntu.sh install_apk_ubuntu.sh
+chmod +x build_apk_ubuntu.sh
 ./build_apk_ubuntu.sh
 ```
 
-Skrypt sprawdza Java/curl/unzip, instaluje brakujące pakiety przez `sudo apt-get`, a następnie pobiera oficjalne Android Command Line Tools, SDK Platform 35, Build Tools 35 i Gradle 8.9. **Nie jest potrzebne Android Studio.** Pierwsze uruchomienie wymaga internetu, kilkuset MB danych, i może wymagać hasła sudo. Pobrane narzędzia zapisuje w `.tools/` oraz standardowym SDK `~/Android/Sdk` (lub pod `ANDROID_SDK_ROOT`).
+The APK is generated at:
 
-Po udanym zbudowaniu:
-
-```
+```text
 output/TouchGuard-debug.apk
 ```
 
-`debug` oznacza wersję do prywatnej instalacji/testowania, podpisaną automatycznie kluczem debug. Nie jest to podpisane APK release do Play Store.
-
-### Instalacja przez USB
-
-Na telefonie włącz **Opcje programistyczne** i **Debugowanie USB**. Podepnij telefon do Ubuntu, zaakceptuj monit autoryzacji i uruchom:
+You can copy the APK to your phone, download it from a GitHub Release, or install it on a connected emulator with:
 
 ```bash
 ./install_apk_ubuntu.sh
 ```
 
-Możesz też przekopiować plik APK na telefon i zainstalować ręcznie, zezwalając na instalację z danego źródła.
+The first build requires an internet connection and may install development dependencies.
 
-### Kafelek Quick Settings
+## Compatibility
 
-Android 13+: w aplikacji użyj **Dodaj kafelek**. Jeśli producent telefonu nie wyświetli monitu, rozwiń panel szybkich ustawień, wybierz **Edytuj** i ręcznie przeciągnij **Blokada dotyku** do aktywnych kafelków. W Androidzie 8–12 dodaj kafelek ręcznie.
+- Minimum Android version: **Android 8.0 (API 26)**.
+- Target SDK: **Android 15 (API 35)**.
+- Some devices, especially those using Xiaomi/POCO HyperOS, may require additional permissions for overlays or background operation.
 
-### Xiaomi / POCO / HyperOS
+## Safety and limitations
 
-HyperOS może mieć dodatkową kontrolę nad **wyświetlaniem wyskakujących okien / nakładek** i działaniem aplikacji w tle. Jeżeli nakładka się nie pojawia, sprawdź systemowe uprawnienia TouchGuard; czasem wymagane jest też zezwolenie na wyświetlanie wyskakujących okien podczas działania w tle. Nazwy opcji różnią się między wersjami HyperOS. Wyłączenie optymalizacji baterii nie jest domyślnie wymagane; w razie problemów sprawdź ograniczenia baterii dla aplikacji.
+TouchGuard is an **accidental-touch prevention tool**, not a security lock or kiosk mode.
 
-### Bezpieczne testowanie
+- It cannot reliably block Android system navigation gestures, the notification shade, or protected system screens.
+- It does not intercept physical power or volume buttons.
+- The overlay is removed when the protection timeout expires or the service stops.
+- Start testing with the default 60-second timeout and confirm that manual unlock works on your device.
 
-Pierwszy test wykonaj z domyślną **1 minutą** i z dostępem do fizycznego przycisku zasilania. Włącz w zwykłej aplikacji, dotknij kilka razy poza kłódką i sprawdź, że dotknięcia nie docierają do aplikacji. Sprawdź regulację głośności, szybki panel, przytrzymanie kłódki 3 sekundy i automatyczne odblokowanie. Jeśli aplikacja zostanie ubita przez system, Android usuwa jej okno nakładki — nie powinno dojść do trwałego zablokowania dotyku.
+Using hardware-key combinations (such as holding Power and Volume Up) is not supported, because ordinary Android applications cannot reliably intercept those system-reserved shortcuts.
 
-## Kod i struktura
+## Privacy
 
-- `app/src/main/java/pl/touchguard/MainActivity.java` — ekran ustawień, uprawnienia, suwak czasu, dodanie kafelka.
-- `.../TouchLockService.java` — przezroczysta nakładka, licznik, przytrzymanie awaryjne, powiadomienie.
-- `.../TouchTileService.java` — kafelek Quick Settings.
-- `.../ToggleActivity.java` — niewidoczne przejście od kafelka do usługi, zgodne z ograniczeniami uruchamiania usług w tle.
-- `.../Prefs.java` — zapis czasu w SharedPreferences.
-- `build_apk_ubuntu.sh` — budowanie APK; `install_apk_ubuntu.sh` — instalacja przez ADB.
+TouchGuard stores the selected timeout locally on the device. It does not request internet access and does not collect or transmit personal data.
 
-Minimalny Android: 8.0 (API 26), `compileSdk=35`, `targetSdk=35`, AGP 8.7.3, Gradle 8.9, Java 17+. Żadnych uprawnień internetowych ani dostępu do prywatnych danych. Uprawnienie `SYSTEM_ALERT_WINDOW` jest niezbędne; `POST_NOTIFICATIONS` jest opcjonalne.
+## Project structure
 
-## GitHub (gdy będziesz gotowy)
-
-```bash
-git init
-git add .
-git commit -m "Initial TouchGuard Android app"
-git branch -M main
-# Załóż puste repozytorium na GitHubie, potem:
-git remote add origin https://github.com/TWOJ_LOGIN/TouchGuardAndroid.git
-git push -u origin main
+```text
+app/src/main/java/pl/touchguard/
+  MainActivity.java       # Main screen, permissions, timeout settings
+  TouchLockService.java  # Touch-blocking overlay and unlock timer
+  TouchTileService.java  # Quick Settings tile
+  ToggleActivity.java     # Tile action helper
+  Prefs.java              # Locally stored preferences
+build_apk_ubuntu.sh       # Build APK on Ubuntu
+install_apk_ubuntu.sh     # Install APK through ADB
 ```
 
-`.gitignore` wyklucza pliki APK, pobrane SDK/Gradle, konfigurację lokalną i katalogi build. APK do pobrania można dodać później jako asset do **GitHub Release**.
+## Project status
 
-## Uwagi techniczne
+**v1.0.0 — initial test release.** The debug APK has been built and installed on an Android emulator; the overlay behavior has not yet been verified on a physical phone.
 
-- Nakładka to `TYPE_APPLICATION_OVERLAY` z pełnoekranowym widokiem konsumującym zdarzenia dotyku, ale bez przejmowania fokusu okna. Android wyświetla ją poniżej krytycznych okien systemowych. Usługa działa jako `foregroundServiceType="specialUse"`, z powiadomieniem i `START_NOT_STICKY`.
-- Limit czasu jest liczony z `SystemClock.elapsedRealtime()`. Po wybudzeniu telefonu aplikacja sprawdzi, czy limit już minął; system może opóźnić wykonanie timera podczas głębokiego uśpienia.
-- System / producent może ograniczać nakładki dla aplikacji chronionych (np. ekran uprawnień, płatności). Nie gwarantujemy zablokowania ich dotyku.
-- Publikacja w Google Play aplikacji z usługą pierwszoplanową typu `specialUse` wymaga dodatkowej deklaracji i może podlegać ocenie Google. Ten projekt jest przede wszystkim do użytku prywatnego / udostępnienia na GitHubie.
+## License
 
-## Stan testów
-
-Kod i XML można zweryfikować statycznie, ale końcowy build i zachowanie nakładki wymagają Android SDK oraz testu na fizycznym telefonie. W przygotowanym środowisku wykonania nie było zainstalowanego Android SDK, dlatego nie dołączono binarnego APK i **nie należy traktować projektu jako przetestowanego na urządzeniu**.
+No software license has been added to the repository yet. A license should be selected before inviting third-party reuse or contributions.
