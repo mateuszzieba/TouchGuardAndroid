@@ -1,0 +1,18 @@
+# Android / Gradle
+.gradle/
+**/build/
+local.properties
+.idea/
+*.iml
+.cxx/
+.externalNativeBuild/
+
+# Downloaded build tools and generated APK
+.tools/
+output/
+*.apk
+*.aab
+
+# Local junk
+.DS_Store
+*~
